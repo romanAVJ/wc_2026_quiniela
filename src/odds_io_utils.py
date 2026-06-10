@@ -382,6 +382,7 @@ def final_results(df: pd.DataFrame, avg_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def save_outputs(df: pd.DataFrame, avg_df: pd.DataFrame, final_df: pd.DataFrame, paths: dict[str, Path], timestamp: str) -> None:
-    df.to_csv(paths["data_processed"] / f"all_correct_scores_{timestamp}.csv", index=False)
-    avg_df.to_csv(paths["data_processed"] / f"avg_score_probabilities_{timestamp}.csv", index=False)
-    final_df.to_csv(paths["results"] / f"most_probable_scores_{timestamp}.csv", index=False)
+    date_suffix = timestamp.split("_", 1)[0]
+    df.to_csv(paths["data_processed"] / f"all_correct_scores_{date_suffix}.csv", index=False)
+    avg_df.to_csv(paths["data_processed"] / f"avg_score_probabilities_{date_suffix}.csv", index=False)
+    final_df.to_csv(paths["results"] / f"most_probable_scores_{date_suffix}.csv", index=False)
