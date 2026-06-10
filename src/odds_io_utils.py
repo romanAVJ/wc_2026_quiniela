@@ -119,6 +119,7 @@ def api_get(base_url: str, endpoint: str, api_key: str, params: dict, timeout: i
 
 
 def fetch_events(config: dict, paths: dict[str, Path], timestamp: str, refresh: bool, logger: logging.Logger):
+    date_suffix = timestamp.split("_", 1)[0]
     ttl = int(config["api"].get("cache_ttl_minutes", 30))
     if not refresh:
         cache = latest_cache(paths["data_cached"], "events", ttl)
@@ -142,7 +143,7 @@ def fetch_events(config: dict, paths: dict[str, Path], timestamp: str, refresh: 
         params,
         int(config["api"].get("request_timeout_seconds", 30)),
     )
-    write_json(paths["data_cached"] / f"{timestamp}_events.json", events)
+    write_json(paths["data_cached"] / f"{date_suffix}_events.json", events)
     return events
 
 
@@ -201,6 +202,7 @@ def smoke_check_first_event(config: dict, first_event: dict, logger: logging.Log
 
 
 def fetch_odds(config: dict, paths: dict[str, Path], events: list[dict], timestamp: str, refresh: bool, logger: logging.Logger):
+    date_suffix = timestamp.split("_", 1)[0]
     ttl = int(config["api"].get("cache_ttl_minutes", 30))
     if not refresh:
         cache = latest_cache(paths["data_cached"], "odds", ttl)
@@ -210,7 +212,7 @@ def fetch_odds(config: dict, paths: dict[str, Path], events: list[dict], timesta
 
     if not events:
         logger.warning("No events to fetch odds for")
-        write_json(paths["data_cached"] / f"{timestamp}_odds.json", [])
+        write_json(paths["data_cached"] / f"{date_suffix}_odds.json", [])
         return []
 
     smoke_check_first_event(config, events[0], logger)
@@ -245,7 +247,7 @@ def fetch_odds(config: dict, paths: dict[str, Path], events: list[dict], timesta
             )
             all_odds.extend(normalize_odds_payload(data))
 
-    write_json(paths["data_cached"] / f"{timestamp}_odds.json", all_odds)
+    write_json(paths["data_cached"] / f"{date_suffix}_odds.json", all_odds)
     logger.info("Fetched odds for %d event payloads", len(all_odds))
     return all_odds
 
