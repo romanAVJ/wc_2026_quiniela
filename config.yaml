@@ -1,0 +1,17 @@
+api:
+  base_url: https://api.odds-api.io/v3
+  api_key_env: ODDS_IO_API_KEY
+  sport: football
+  league_slug: international-world-cup
+  bookmakers: [Bet365, Unibet]
+  request_timeout_seconds: 30
+  cache_ttl_minutes: 30
+  multi_batch_size: 10
+tournament:
+  group_stage_start: "2026-06-11 00:00:00"
+  group_stage_end: "2026-06-27 23:59:59"
+paths:
+  data_cached: data/cached
+  data_processed: data/processed
+  results: results
+  logs: logs

@@ -1,0 +1,9 @@
+.env
+human_exploration/*
+src/human_exploration/*
+data/
+results/
+logs/
+.venv/
+__pycache__/
+*.pyc

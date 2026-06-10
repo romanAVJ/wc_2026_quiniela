@@ -1,0 +1,18 @@
+[project]
+name = "wc-2026-quiniela"
+version = "0.1.0"
+description = "Odds API pipeline scaffold for WC 2026 Quiniela."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas",
+    "requests",
+    "pyyaml",
+    "python-dotenv",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+]
