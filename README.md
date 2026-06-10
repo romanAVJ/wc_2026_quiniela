@@ -12,4 +12,4 @@ Minimal Odds API pipeline scaffold.
 
 Pipeline outputs are written under `data/processed` and `results`. Logs are written under `logs`.
 
-If the provider currently has no `international-world-cup` events, outputs will be header-only until Odds-API.io publishes the fixtures under that league slug.
+If the provider has no events for the configured `international-fifa-world-cup` slug/window, outputs may be header-only.
