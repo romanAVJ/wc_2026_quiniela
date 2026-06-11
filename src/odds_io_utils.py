@@ -177,30 +177,6 @@ def filter_events(events, config: dict, logger: logging.Logger) -> list[dict]:
     return filtered
 
 
-def has_correct_score_market(odds_data, bookmakers: list[str]) -> bool:
-    for bookmaker, market in iter_bookmaker_markets(odds_data, bookmakers):
-        if market_name(market).lower() == "correct score":
-            return True
-    return False
-
-
-def smoke_check_first_event(config: dict, first_event: dict, logger: logging.Logger) -> None:
-    api_key = require_api_key(config)
-    bookmakers = config["api"].get("bookmakers", [])
-    odds_data = api_get(
-        config["api"]["base_url"],
-        "odds",
-        api_key,
-        {"eventId": event_id(first_event), "bookmakers": ",".join(bookmakers)},
-        int(config["api"].get("request_timeout_seconds", 30)),
-    )
-    if not has_correct_score_market(odds_data, bookmakers):
-        match = event_match(first_event)
-        logger.error("Smoke check failed: no configured bookmaker has a Correct Score market for %s", match)
-        raise RuntimeError("Correct Score market not available in smoke check")
-    logger.info("Smoke check passed for %s", event_match(first_event))
-
-
 def fetch_odds(config: dict, paths: dict[str, Path], events: list[dict], timestamp: str, refresh: bool, logger: logging.Logger):
     date_suffix = timestamp.split("_", 1)[0]
     ttl = int(config["api"].get("cache_ttl_minutes", 30))
@@ -215,7 +191,6 @@ def fetch_odds(config: dict, paths: dict[str, Path], events: list[dict], timesta
         write_json(paths["data_cached"] / f"{date_suffix}_odds.json", [])
         return []
 
-    smoke_check_first_event(config, events[0], logger)
     api_key = require_api_key(config)
     bookmakers = config["api"].get("bookmakers", [])
     batch_size = min(int(config["api"].get("multi_batch_size", 10)), 10)
